@@ -362,9 +362,10 @@ async def fetch_article(url: str, output_dir: Path | None = None) -> None:
     # 转 Markdown
     md = convert_to_markdown(content_html, code_blocks)
 
-    # 下载图片
+    # 下载图片（按公众号 → 文章分组保存）
     safe_title = re.sub(r'[/\\?%*:|"<>]', "_", meta["title"])[:80]
-    article_dir = output_dir / safe_title
+    safe_author = re.sub(r'[/\\?%*:|"<>]', "_", meta.get("author") or "未分类")[:40] or "未分类"
+    article_dir = output_dir / safe_author / safe_title
     img_dir = article_dir / "images"
     img_dir.mkdir(parents=True, exist_ok=True)
 
